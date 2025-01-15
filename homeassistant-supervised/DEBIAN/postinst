@@ -19,6 +19,11 @@ URL_VERSION="https://version.home-assistant.io/stable.json"
 HASSIO_VERSION=$(curl -s ${URL_VERSION} | jq -e -r '.supervisor')
 URL_APPARMOR_PROFILE="https://version.home-assistant.io/apparmor.txt"
 
+if [ -n "$DOCKER_STORAGE_DRIVER" ]; then
+  sed -i "s@\:\s*\"overlay2\"@\: \"$DOCKER_STORAGE_DRIVER\"@g" /etc/docker/daemon.json
+fi
+cat /etc/docker/daemon.* >> /tmp/hassio.log
+
 # reload systemd
 info "Reload systemd"
 systemctl daemon-reload
@@ -62,9 +67,6 @@ fi
 
 # Restart Docker service
 info "Restarting docker service"
-if [ -n "$DOCKER_STORAGE_DRIVER" ]; then
-  sed -i "s@\"storage-driver\":\s*\"overlay2\"@\"storage-driver\": \"$DOCKER_STORAGE_DRIVER\"@g" /etc/docker/daemon.json
-fi
 systemctl restart "${SERVICE_DOCKER}"
 
 # Check network connection
