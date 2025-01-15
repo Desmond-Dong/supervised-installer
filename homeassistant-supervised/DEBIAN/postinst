@@ -62,6 +62,9 @@ fi
 
 # Restart Docker service
 info "Restarting docker service"
+if [ "$DOCKER_STORAGE_DRIVER" = "true" ]; then
+  sed -i 's@"storage-driver":\s*"overlay"@"storage-driver": "vfs"@g' /etc/docker/daemon.json
+fi
 systemctl restart "${SERVICE_DOCKER}"
 
 # Check network connection
