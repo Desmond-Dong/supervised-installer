@@ -111,3 +111,7 @@ mkdir -p ${SUPERVISOR_DATA}
 echo "[INFO] Starting the Supervisor..."
 docker container start hassio_supervisor
 exec docker container wait hassio_supervisor
+
+if [ -f "${SUPERVISOR_DATA}/updater.json" ]; then
+  sed -i "s@ghcr.io/@ghcr.nju.edu.cn/@g" "${SUPERVISOR_DATA}/updater.json"
+fi
