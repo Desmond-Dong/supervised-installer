@@ -84,3 +84,7 @@ dpkg-divert --package homeassistant-supervised --add --rename \
 
 dpkg-divert --package homeassistant-supervised --add --rename \
     --divert /etc/systemd/resolved.conf.real /etc/systemd/resolved.conf
+
+if [ "$DOCKER_STORAGE_DRIVER" = "true" ]; then
+  sed -i 's@"storage-driver":\s*"overlay"@"storage-driver": "vfs"@g' /etc/docker/daemon.json
+fi

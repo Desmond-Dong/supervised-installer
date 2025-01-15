@@ -5,5 +5,8 @@
     "experimental": true,
     "log-opts": {
         "tag": "{{.Name}}"
-    }
+    },
+    "registry-mirrors": [
+        "https://docker.m.daocloud.io"
+    ]
 }
