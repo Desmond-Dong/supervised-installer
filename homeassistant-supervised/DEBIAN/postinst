@@ -62,8 +62,8 @@ fi
 
 # Restart Docker service
 info "Restarting docker service"
-if [ "$DOCKER_STORAGE_DRIVER" = "true" ]; then
-  sed -i 's@"storage-driver":\s*"overlay"@"storage-driver": "vfs"@g' /etc/docker/daemon.json
+if [ -n "$DOCKER_STORAGE_DRIVER" ]; then
+  sed -i "s@\"storage-driver\":\s*\"overlay2\"@\"storage-driver\": \"$DOCKER_STORAGE_DRIVER\"@g" /etc/docker/daemon.json
 fi
 systemctl restart "${SERVICE_DOCKER}"
 
