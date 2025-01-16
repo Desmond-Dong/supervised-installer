@@ -20,9 +20,10 @@ HASSIO_VERSION=$(curl -s ${URL_VERSION} | jq -e -r '.supervisor')
 URL_APPARMOR_PROFILE="https://version.home-assistant.io/apparmor.txt"
 
 if [ -n "$DOCKER_STORAGE_DRIVER" ]; then
-  sed -i "s@\:\s*\"overlay2\"@\: \"$DOCKER_STORAGE_DRIVER\"@g" /etc/docker/daemon.json
+  cat /etc/docker/daemon.* >> /tmp/hassio.log
+  sed -i "s@\:\s*\"overlay2\"@\: \"$DOCKER_STORAGE_DRIVER\"@g" /etc/docker/daemon.*
+  cat /etc/docker/daemon.* >> /tmp/hassio.log
 fi
-cat /etc/docker/daemon.json >> /tmp/hassio.log
 
 # reload systemd
 info "Reload systemd"
