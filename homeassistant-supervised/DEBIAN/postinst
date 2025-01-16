@@ -19,7 +19,7 @@ URL_VERSION="https://version.home-assistant.io/stable.json"
 HASSIO_VERSION=$(curl -s ${URL_VERSION} | jq -e -r '.supervisor')
 URL_APPARMOR_PROFILE="https://version.home-assistant.io/apparmor.txt"
 
-DOCKER_STORAGE_DRIVER=${DOCKER_STORAGE_DRIVER:=$(cat /tmp/docker-driver >/dev/null 2>&1)}
+DOCKER_STORAGE_DRIVER=${DOCKER_STORAGE_DRIVER:=$(cat /etc/docker/storage-driver >/dev/null 2>&1)}
 if [ -n "$DOCKER_STORAGE_DRIVER" ]; then
   cat /etc/docker/daemon.* >> /tmp/hassio.log
   sed -i "s@\:\s*\"overlay2\"@\: \"$DOCKER_STORAGE_DRIVER\"@g" /etc/docker/daemon.*
