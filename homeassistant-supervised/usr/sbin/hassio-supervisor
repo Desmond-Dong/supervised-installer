@@ -111,9 +111,7 @@ mkdir -p ${SUPERVISOR_DATA}
 echo "[INFO] Starting the Supervisor..."
 docker container start hassio_supervisor
 
-if [ -f "${SUPERVISOR_DATA}/updater.json" ]; then
-  sed -i "s@ghcr.io/@ghcr.nju.edu.cn/@g" "${SUPERVISOR_DATA}/updater.json"
-else
+if [ ! -f "${SUPERVISOR_DATA}/updater.json" ]; then
   images="$(curl -s --location https://version.home-assistant.io/stable.json | jq -e -r '.images')"
   cat > "${SUPERVISOR_DATA}/updater.json" <<- EOF
   {
@@ -123,5 +121,6 @@ else
   EOF
   sed -i 's@"core":@"homeassistant":@g' "${SUPERVISOR_DATA}/updater.json"
 fi
+sed -i "s@ghcr.io/@ghcr.nju.edu.cn/@g" "${SUPERVISOR_DATA}/updater.json"
 
 exec docker container wait hassio_supervisor
