@@ -7,6 +7,6 @@
         "tag": "{{.Name}}"
     },
     "registry-mirrors": [
-        "https://docker.m.daocloud.io"
+        "https://ghcr.m.daocloud.io"
     ]
 }
