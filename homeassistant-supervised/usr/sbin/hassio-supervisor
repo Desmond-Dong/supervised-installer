@@ -9,7 +9,7 @@ set -e
 CONFIG_FILE=%%HASSIO_CONFIG%%
 
 # Init supervisor
-SUPERVISOR_DATA="$(jq --raw-output '.data // "/usr/share/hassio"' ${CONFIG_FILE})"
+SUPERVISOR_DATA="$(jq --raw-output '.data // "/var/lib/homeassistant"' ${CONFIG_FILE})"
 SUPERVISOR_STARTUP_MARKER="/run/supervisor/startup-marker"
 SUPERVISOR_STARTSCRIPT_VERSION="${SUPERVISOR_DATA}/supervisor-version"
 SUPERVISOR_MACHINE="$(jq --raw-output '.machine' ${CONFIG_FILE})"
@@ -52,6 +52,8 @@ if [ -z "${SUPERVISOR_IMAGE_ID}" ]; then
     if docker pull "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}"; then
         # Tag as latest
         docker tag "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}" "${SUPERVISOR_IMAGE}:latest"
+    elif docker pull "${SUPERVISOR_IMAGE}:latest"; then
+        echo "[INFO] Supervisor latest downloaded."
     else
         # Pull failed, updater info might be corrupted or the release might have
 	# been removed from the container registry, delete the updater info
