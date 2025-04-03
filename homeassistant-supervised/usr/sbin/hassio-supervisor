@@ -110,6 +110,7 @@ fi
 
 # Run supervisor
 mkdir -p ${SUPERVISOR_DATA}
+mount --make-shared ${SUPERVISOR_DATA} 2>/dev/null
 echo "[INFO] Starting the Supervisor..."
 docker container start hassio_supervisor
 exec docker container wait hassio_supervisor
