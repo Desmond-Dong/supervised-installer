@@ -48,8 +48,17 @@ if [ -z "${SUPERVISOR_IMAGE_ID}" ]; then
 
     echo "[WARNING] Supervisor image missing, downloading a fresh one: ${SUPERVISOR_VERSION}"
 
+    if [ -n "${FROZEN_VERSION}" ]; then
+      echo "[WARNING] Using frozen version: ${FROZEN_VERSION}"
+      if docker pull "${SUPERVISOR_IMAGE}:${FROZEN_VERSION}"; then
+        docker tag "${SUPERVISOR_IMAGE}:${FROZEN_VERSION}" "${SUPERVISOR_IMAGE}:latest"
+      else
+        echo "[ERROR] Supervisor downloading failed. ${FROZEN_VERSION}"
+        exit 1
+      fi
+
     # Pull in the Supervisor
-    if docker pull "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}"; then
+    elif docker pull "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}"; then
         # Tag as latest
         docker tag "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}" "${SUPERVISOR_IMAGE}:latest"
     elif docker pull "${SUPERVISOR_IMAGE}:latest"; then
