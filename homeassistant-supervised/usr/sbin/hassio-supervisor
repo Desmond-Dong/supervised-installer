@@ -15,7 +15,8 @@ SUPERVISOR_STARTSCRIPT_VERSION="${SUPERVISOR_DATA}/supervisor-version"
 SUPERVISOR_MACHINE="$(jq --raw-output '.machine' ${CONFIG_FILE})"
 SUPERVISOR_IMAGE="$(jq --raw-output '.supervisor' ${CONFIG_FILE})"
 
-SUPERVISOR_IMAGE_ID=$(docker images --no-trunc --filter "reference=${SUPERVISOR_IMAGE}:latest" --format "{{.ID}}" || echo "")
+IMAGE_TAG=${FROZEN_VERSION:=latest}
+SUPERVISOR_IMAGE_ID=$(docker images --no-trunc --filter "reference=${SUPERVISOR_IMAGE}:${IMAGE_TAG}" --format "{{.ID}}" || echo "")
 SUPERVISOR_CONTAINER_ID=$(docker inspect --format='{{.Image}}' hassio_supervisor || echo "")
 
 # Check if previous run left the startup-marker in place. If so, we assume the
